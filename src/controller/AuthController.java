@@ -23,7 +23,6 @@ public class AuthController {
         if (!senha.equals(confirmaSenha)) {
             return "As senhas não coincidem!";
         }
-
         // Gravação no Banco MySQL
         String sql = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
 
@@ -35,6 +34,9 @@ public class AuthController {
             stmt.setString(3, senha);
 
             stmt.executeUpdate();
+            new Thread(() -> {
+                util.EmailUtils.enviarEmailBoasVindas(email, nome);
+            }).start();
             return "OK"; // Retorna OK para exibir mensagem de sucesso na TelaCadastro
 
         } catch (SQLException e) {
@@ -79,6 +81,37 @@ public class AuthController {
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+ // 4. MÉTODO PARA GERAR CÓDIGO E ENVIAR E-MAIL DE RECUPERAÇÃO
+    public boolean solicitarRecuperacaoSenha(String email) {
+        if (!verificarEmailExiste(email)) {
+            return false; // E-mail não existe no banco
+        }
+
+        // 1. Gera o código de 6 dígitos
+        String codigo = util.EmailUtils.gerarCodigo();
+
+        // 2. Salva o código no MySQL para esse usuário
+        String sql = "UPDATE usuarios SET codigo_recuperacao = ? WHERE email = ?";
+
+        try (Connection conn = util.Conexao.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, codigo);
+            stmt.setString(2, email);
+            stmt.executeUpdate();
+
+            // 3. Dispara o e-mail em background
+            new Thread(() -> {
+                util.EmailUtils.enviarCodigoRecuperacao(email, codigo);
+            }).start();
+
+            return true;
 
         } catch (SQLException e) {
             e.printStackTrace();

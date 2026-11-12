@@ -93,13 +93,13 @@ public class TelaEsqueceuSenha extends JFrame {
         // Campo de Texto do E-mail
         txtEmail = criarCampoTexto("Seu e-mail cadastrado");
         gbc.gridy = 2;
-        gbc.insets = new Insets(15, 25, 15, 25);
+        gbc.insets = new Insets(15, 30, 15, 30);
         panelCard.add(txtEmail, gbc);
 
         // Botão Enviar
         btnEnviar = criarBotaoEspelhado("Enviar Código");
         gbc.gridy = 3;
-        gbc.insets = new Insets(5, 25, 10, 25);
+        gbc.insets = new Insets(5, 35, 10, 35);
         panelCard.add(btnEnviar, gbc);
 
         // Link para Voltar ao Login
@@ -125,7 +125,7 @@ public class TelaEsqueceuSenha extends JFrame {
 
             // Desabilita o botão temporariamente enquanto processa
             btnEnviar.setEnabled(false);
-            btnEnviar.setText("Verificando...");
+            btnEnviar.setText("Aguarde..");
 
             // Processamento em segundo plano (Thread)
             new Thread(() -> {
@@ -229,8 +229,9 @@ public class TelaEsqueceuSenha extends JFrame {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                int w = getWidth(); 
+                int w = getWidth();
                 int h = getHeight();
+
                 boolean hover = getModel().isRollover();
 
                 Color cor1 = hover ? new Color(0, 160, 255) : AZUL_BOTAO;
@@ -240,12 +241,25 @@ public class TelaEsqueceuSenha extends JFrame {
                 g2.setPaint(gp);
                 g2.fill(new RoundRectangle2D.Float(0, 0, w, h, 14, 14));
 
-                g2.setColor(BRANCO); 
+                GradientPaint gpReflexo = new GradientPaint(
+                    0, 0, new Color(255, 255, 255, 110),
+                    0, h / 2, new Color(255, 255, 255, 15)
+                );
+                g2.setPaint(gpReflexo);
+                g2.fill(new RoundRectangle2D.Float(1, 1, w - 2, h / 2 - 1, 12, 12));
+
+                g2.setColor(new Color(255, 255, 255, hover ? 160 : 90));
+                g2.setStroke(new BasicStroke(1.2f));
+                g2.draw(new RoundRectangle2D.Float(1, 1, w - 2, h - 2, 14, 14));
+
                 g2.setFont(getFont());
                 FontMetrics fm = g2.getFontMetrics();
                 int xText = (w - fm.stringWidth(getText())) / 2;
                 int yText = (h + fm.getAscent() - fm.getDescent()) / 2;
+
+                g2.setColor(BRANCO);
                 g2.drawString(getText(), xText, yText);
+
                 g2.dispose();
             }
         };
@@ -258,4 +272,7 @@ public class TelaEsqueceuSenha extends JFrame {
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
     }
+
+  
+    
 }

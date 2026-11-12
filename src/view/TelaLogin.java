@@ -168,7 +168,7 @@ public class TelaLogin extends JFrame {
 
         gbcEsq.gridy = 1;
         gbcEsq.anchor = GridBagConstraints.WEST;
-        gbcEsq.insets = new Insets(0, 30, 0, 0);
+        gbcEsq.insets = new Insets(-18, 30, 0, 0);
 
         panelEsquerda.add(lblTextoLogo, gbcEsq);
         gbcEsq.anchor = GridBagConstraints.CENTER;
@@ -437,19 +437,26 @@ public class TelaLogin extends JFrame {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                g2.setColor(getModel().isRollover() ? AZUL_NEON : CINZA_TEXTO);
-                g2.setStroke(new BasicStroke(1.8f));
-
                 int w = getWidth();
                 int h = getHeight();
 
-                g2.drawArc(w / 2 - 9, h / 2 - 6, 18, 12, 0, 180);
-                g2.drawArc(w / 2 - 9, h / 2 - 6, 18, 12, 0, -180);
-                g2.fillOval(w / 2 - 3, h / 2 - 3, 6, 6);
+                boolean hover = getModel().isRollover();
+                Color corIcone = senhaVisivel ? AZUL_NEON : (hover ? BRANCO : CINZA_TEXTO);
+                
+                g2.setColor(corIcone);
+                g2.setStroke(new BasicStroke(1.8f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
-                if (!senhaVisivel) {
-                    g2.setStroke(new BasicStroke(2f));
-                    g2.drawLine(w / 2 - 8, h / 2 + 7, w / 2 + 8, h / 2 - 7);
+                // Desenho das curvaturas do olho
+                g2.drawArc(w / 2 - 9, h / 2 - 5, 18, 10, 0, 180);
+                g2.drawArc(w / 2 - 9, h / 2 - 5, 18, 10, 0, -180);
+
+                if (senhaVisivel) {
+                    g2.fillOval(w / 2 - 3, h / 2 - 3, 6, 6);
+                } else {
+                    g2.drawOval(w / 2 - 2, h / 2 - 2, 4, 4);
+                    g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                    g2.setColor(hover ? BRANCO : CINZA_TEXTO);
+                    g2.drawLine(w / 2 - 8, h / 2 + 6, w / 2 + 8, h / 2 - 6);
                 }
 
                 g2.dispose();

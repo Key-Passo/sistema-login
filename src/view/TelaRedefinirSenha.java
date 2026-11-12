@@ -89,7 +89,7 @@ public class TelaRedefinirSenha extends JFrame {
         JLabel lblRegras = new JLabel("<html><div style='background-color: #0A0E16; padding: 8px; border-radius: 6px; color: #A0AFC8; font-size: 10px;'>"
                 + "<b>Requisitos da senha:</b><br>"
                 + "• De 8 a 20 caracteres<br>"
-                + "• Pelo menos 1 letra maiúscula<br>"
+                + "• Minimo 1 letra maiúscula<br>"
                 + "• Pelo menos 1 número<br>"
                 + "• Pelo menos 1 símbolo (!@#$%^&*...)"
                 + "</div></html>");
@@ -260,40 +260,65 @@ public class TelaRedefinirSenha extends JFrame {
         return field;
     }
 
-    private JButton criarBotaoEspelhado(String texto) {
-        JButton btn = new JButton(texto) {
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    private JButton criarBotaoEspelhado(String texto) {JButton btn = new JButton(texto) {
+        private static final long serialVersionUID = 1L;
 
-                int w = getWidth(); int h = getHeight();
-                boolean hover = getModel().isRollover();
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                Color cor1 = hover ? new Color(0, 160, 255) : AZUL_BOTAO;
-                Color cor2 = hover ? new Color(0, 100, 220) : new Color(10, 80, 180);
+            int w = getWidth();
+            int h = getHeight();
 
-                GradientPaint gp = new GradientPaint(0, 0, cor1, 0, h, cor2);
-                g2.setPaint(gp);
-                g2.fill(new RoundRectangle2D.Float(0, 0, w, h, 14, 14));
+            boolean hover = getModel().isRollover();
 
-                g2.setColor(BRANCO); g2.setFont(getFont());
-                FontMetrics fm = g2.getFontMetrics();
-                int xText = (w - fm.stringWidth(getText())) / 2;
-                int yText = (h + fm.getAscent() - fm.getDescent()) / 2;
-                g2.drawString(getText(), xText, yText);
-                g2.dispose();
-            }
-        };
+            Color cor1 = hover ? new Color(0, 160, 255) : AZUL_BOTAO;
+            Color cor2 = hover ? new Color(0, 100, 220) : new Color(10, 80, 180);
 
-        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btn.setPreferredSize(new Dimension(0, 40));
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        return btn;
-    }
-    
+            GradientPaint gp = new GradientPaint(0, 0, cor1, 0, h, cor2);
+            g2.setPaint(gp);
+            g2.fill(new RoundRectangle2D.Float(0, 0, w, h, 14, 14));
+
+            // Reflexo espelhado na metade superior do botão
+            GradientPaint gpReflexo = new GradientPaint(
+                0, 0, new Color(255, 255, 255, 110),
+                0, h / 2, new Color(255, 255, 255, 15)
+            );
+            g2.setPaint(gpReflexo);
+            g2.fill(new RoundRectangle2D.Float(1, 1, w - 2, h / 2 - 1, 12, 12));
+
+            // Borda interna iluminada
+            g2.setColor(new Color(255, 255, 255, hover ? 160 : 90));
+            g2.setStroke(new BasicStroke(1.2f));
+            g2.draw(new RoundRectangle2D.Float(1, 1, w - 2, h - 2, 14, 14));
+
+            // Centralização do texto
+            g2.setFont(getFont());
+            FontMetrics fm = g2.getFontMetrics();
+            int xText = (w - fm.stringWidth(getText())) / 2;
+            int yText = (h + fm.getAscent() - fm.getDescent()) / 2;
+
+            g2.setColor(BRANCO);
+            g2.drawString(getText(), xText, yText);
+
+            g2.dispose();
+        }
+    };
+
+    // Configurações essenciais para o Swing não desenhar o botão cinza padrão por baixo
+    btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+    btn.setPreferredSize(new Dimension(0, 40));
+    btn.setContentAreaFilled(false);
+    btn.setBorderPainted(false);
+    btn.setFocusPainted(false);
+    btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+    return btn;}
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new TelaEsqueceuSenha().setVisible(true);
+           
+        });
+    } 
 }

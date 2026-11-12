@@ -58,7 +58,8 @@ public class TelaCadastro extends JFrame {
         };
         panelBackground.setLayout(new GridBagLayout());
         add(panelBackground);
-
+        
+        //LINHA QUE DIVIDE 
         JPanel panelCard = new JPanel() {
             private static final long serialVersionUID = 1L;
             @Override
@@ -69,13 +70,16 @@ public class TelaCadastro extends JFrame {
                 g2.setColor(BG_CARD);
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 24, 24);
 
-                int xLinha = (int) (getWidth() * 0.40);
+                int xLinha = (int) (getWidth() * 0.45);
+                int margemVertical = 40;
+
                 g2.setColor(new Color(255, 255, 255, 40)); 
-                g2.setStroke(new BasicStroke(1.2f));
-                g2.drawLine(xLinha, 40, xLinha, getHeight() - 40);
+                g2.setStroke(new BasicStroke(1.2f)); 
+                g2.drawLine(xLinha, margemVertical, xLinha, getHeight() - margemVertical);
 
                 g2.setColor(new Color(255, 255, 255, 12));
                 g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 24, 24);
+
                 g2.dispose();
             }
         };
@@ -96,10 +100,16 @@ public class TelaCadastro extends JFrame {
         JLabel lblSub = new JLabel("<html><center style='color: #A0AFC8;'>Junte-se à nossa<br>plataforma de segurança.</center></html>");
         lblSub.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
-        gbcEsq.gridy = 0; gbcEsq.insets = new Insets(0, 0, 15, 0);
+     // 1. TÍTULO LOGO (KeyPasso*)
+        gbcEsq.gridy = 0; 
+        gbcEsq.insets = new Insets(0, 0, 10, 0); // (Cima, Esquerda, Baixo, Direita)
         panelEsquerda.add(lblTextoLogo, gbcEsq);
+
+        // 2. SUBTÍTULO ("Junte-se à nossa...")
         gbcEsq.gridy = 1;
+        gbcEsq.insets = new Insets(-7, -16, 15, 0); // Ajusta o espaçamento do subtítulo individualmente!
         panelEsquerda.add(lblSub, gbcEsq);
+
         panelCard.add(panelEsquerda);
 
         // Lado Direito (Formulário)
@@ -109,33 +119,42 @@ public class TelaCadastro extends JFrame {
         gbcDir.fill = GridBagConstraints.HORIZONTAL;
         gbcDir.gridx = 0; gbcDir.insets = new Insets(4, 25, 4, 25);
 
-        JLabel lblTitulo = new JLabel("<html><span style='letter-spacing: 1.5px; color: #FFFFFF;'>CRIAR CONTA</span><span style='color: #00D4FF;'>*</span></html>");
+        JLabel lblTitulo = new JLabel("<html><span style='letter-spacing: 1.5px; color: #FFFFFF;'>CRIAR CONTA</span></span><span style='color: #FFE600;'><b>*</b></span></html>");
         lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
 
-        gbcDir.gridy = 0; gbcDir.insets = new Insets(10, 25, 10, 25);
+        gbcDir.gridy = 0; gbcDir.insets = new Insets(-25, 25, 10, 25);
         panelDireita.add(lblTitulo, gbcDir);
 
         txtNome = criarCampoTexto("Nome Completo");
-        gbcDir.gridy = 1; panelDireita.add(txtNome, gbcDir);
+        gbcDir.gridy = 1;
+        gbcDir.insets = new Insets(5, -30, 10, -15);
+        panelDireita.add(txtNome, gbcDir);
 
         txtEmail = criarCampoTexto("E-mail");
-        gbcDir.gridy = 2; panelDireita.add(txtEmail, gbcDir);
+        gbcDir.gridy = 2; 
+        gbcDir.insets = new Insets(5, -30, 10, -15);
+        panelDireita.add(txtEmail, gbcDir);
 
         txtSenha = criarCampoSenha("Senha");
-        gbcDir.gridy = 3; panelDireita.add(txtSenha, gbcDir);
+        gbcDir.gridy = 3; 
+        gbcDir.insets = new Insets(5, -30, 10, -15);
+        panelDireita.add(txtSenha, gbcDir);
 
         txtConfirmaSenha = criarCampoSenha("Confirmar Senha");
-        gbcDir.gridy = 4; panelDireita.add(txtConfirmaSenha, gbcDir);
+        gbcDir.gridy = 4; 
+        gbcDir.insets = new Insets(5, -30, 10, -15);
+        panelDireita.add(txtConfirmaSenha, gbcDir);
 
         btnCadastrar = criarBotaoEspelhado("Cadastrar");
-        gbcDir.gridy = 5; gbcDir.insets = new Insets(15, 25, 5, 25);
+        gbcDir.gridy = 5; 
+        gbcDir.insets = new Insets(15, 25, 5, 25);
         panelDireita.add(btnCadastrar, gbcDir);
 
-        lblVoltarLogin = new JLabel("Já tem uma conta? Faça login", SwingConstants.CENTER);
+        lblVoltarLogin = new JLabel("Já tem uma conta? Fazer login", SwingConstants.CENTER);
         lblVoltarLogin.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         lblVoltarLogin.setForeground(AZUL_NEON);
         lblVoltarLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        gbcDir.gridy = 6; gbcDir.insets = new Insets(5, 25, 10, 25);
+        gbcDir.gridy = 6; gbcDir.insets = new Insets(5, 25, -33, 25);
         panelDireita.add(lblVoltarLogin, gbcDir);
 
         panelCard.add(panelDireita);
@@ -254,7 +273,9 @@ public class TelaCadastro extends JFrame {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                int w = getWidth(); int h = getHeight();
+                int w = getWidth();
+                int h = getHeight();
+
                 boolean hover = getModel().isRollover();
 
                 Color cor1 = hover ? new Color(0, 160, 255) : AZUL_BOTAO;
@@ -264,11 +285,25 @@ public class TelaCadastro extends JFrame {
                 g2.setPaint(gp);
                 g2.fill(new RoundRectangle2D.Float(0, 0, w, h, 14, 14));
 
-                g2.setColor(BRANCO); g2.setFont(getFont());
+                GradientPaint gpReflexo = new GradientPaint(
+                    0, 0, new Color(255, 255, 255, 110),
+                    0, h / 2, new Color(255, 255, 255, 15)
+                );
+                g2.setPaint(gpReflexo);
+                g2.fill(new RoundRectangle2D.Float(1, 1, w - 2, h / 2 - 1, 12, 12));
+
+                g2.setColor(new Color(255, 255, 255, hover ? 160 : 90));
+                g2.setStroke(new BasicStroke(1.2f));
+                g2.draw(new RoundRectangle2D.Float(1, 1, w - 2, h - 2, 14, 14));
+
+                g2.setFont(getFont());
                 FontMetrics fm = g2.getFontMetrics();
                 int xText = (w - fm.stringWidth(getText())) / 2;
                 int yText = (h + fm.getAscent() - fm.getDescent()) / 2;
+
+                g2.setColor(BRANCO);
                 g2.drawString(getText(), xText, yText);
+
                 g2.dispose();
             }
         };
